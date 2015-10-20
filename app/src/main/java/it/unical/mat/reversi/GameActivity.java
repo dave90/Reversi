@@ -14,6 +14,8 @@ import it.unical.mat.reversi.core.GameManager;
 
 public class GameActivity extends AppCompatActivity {
 
+    private GameManager gameManager = new GameManager();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +38,6 @@ public class GameActivity extends AppCompatActivity {
         final PlayerType playerTypeWhite = extraModeWhite.contains("Human") ? PlayerType.HUMAN : PlayerType.COMPUTER;
         final PlayerType playerTypeBlack = extraModeBlack.contains("Human") ? PlayerType.HUMAN : PlayerType.COMPUTER;
 
-        GameManager gameManager = new GameManager();
-
         if (extraModeWhite.contains("Computer")) {
             gameManager.setAI(getAIType(extraModeWhite.substring(extraModeWhite.indexOf("(") + 1,extraModeWhite.indexOf(")"))));
         }
@@ -52,6 +52,7 @@ public class GameActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Log.i("Clicked: ", String.valueOf(a.getId()));
+                        a.setImageResource(R.drawable.black);
                     }
                 });
             }
