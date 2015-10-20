@@ -1,9 +1,12 @@
 package it.unical.mat.reversi;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import it.unical.mat.reversi.ai.AIType;
@@ -41,6 +44,17 @@ public class GameActivity extends AppCompatActivity {
         if (playerTypeBlack == PlayerType.COMPUTER) {
             gameManager.setAI(getAIType(extraModeBlack.substring(extraModeBlack.indexOf("(") + 1,extraModeBlack.indexOf(")"))));
         }
+
+        for (int i = 1; i <= 8; i++)
+            for (int j = 1; j <= 8; j++) {
+                final ImageView a = (ImageView) findViewById(getResources().getIdentifier("c_" + i + "_" + j, "id", getPackageName()));
+                a.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.i("Clicked: ", String.valueOf(a.getId()));
+                    }
+                });
+            }
 
     }
 
