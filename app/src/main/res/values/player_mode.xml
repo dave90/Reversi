@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="player_mode">
+        <item>Human</item>
+        <item>Computer (None)</item>
+        <item>Computer (Basic)</item>
+        <item>Computer (Medium)</item>
+        <item>Computer (Hard)</item>
+    </string-array>
+</resources>
