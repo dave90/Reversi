@@ -6,4 +6,5 @@
     <string name="player_white">Player White</string>
     <string name="player_black">Player Black</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="pawns">Current Pawns</string>
 </resources>

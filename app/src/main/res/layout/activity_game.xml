@@ -8,8 +8,8 @@
     android:background="@color/darkgreen"
     tools:context="it.unical.mat.reversi.GameActivity">
 
-
     <FrameLayout
+        android:id="@+id/frame_chessboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -17,6 +17,7 @@
 
     <!-- CHESSBOARD -->
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_centerHorizontal="true"
         android:id="@+id/chessboard" android:layout_height="wrap_content" android:layout_width="fill_parent">
         <!-- NOTATION UP-->
         <TableRow android:id="@+id/notation_up" android:layout_height="wrap_content" android:layout_width="wrap_content">
@@ -176,5 +177,61 @@
     <!-- END CHESSBOARD -->
 
     </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/frame_chessboard"
+        android:layout_alignParentBottom="true">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/pawns"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/player_white"
+            android:id="@+id/textViewWhite"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textViewPawnsWhite"
+            android:text="2"
+            android:layout_marginLeft="10sp"
+            android:layout_marginStart="10sp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textViewPawnsBlack"
+            android:text="2"
+            android:layout_marginRight="10sp"
+            android:layout_marginEnd="10sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/player_black"
+            android:id="@+id/textViewBlack"
+            android:layout_column="4" />
+
+    </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
