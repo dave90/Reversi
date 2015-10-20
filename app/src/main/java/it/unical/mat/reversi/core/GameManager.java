@@ -1,6 +1,8 @@
 package it.unical.mat.reversi.core;
 
 import android.graphics.Point;
+
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
@@ -267,7 +269,7 @@ public class GameManager {
 		
 		try {
 			final Constructor<?> constructor = Class.forName(
-					"ai.AI" + tipo.name()).getConstructor();
+					"it.unical.mat.reversi.ai.AI" + tipo.name()).getConstructor();
 			this.ai = (AIAbstractClass) constructor.newInstance();
 			System.out.println("Intelligenza scelta: " + tipo.name());
 		} catch (final Exception e) {
