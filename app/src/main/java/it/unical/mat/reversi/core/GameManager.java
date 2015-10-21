@@ -19,7 +19,7 @@ public class GameManager {
 	private final List<Mossa> mosse_effettuate;
 	
 	private Mossa ultimaMossaComputer;
-	
+
 	public GameManager() {
 		this.scacchiera.setCella(3, 3, Cella.BIANCA);
 		this.scacchiera.setCella(4, 4, Cella.BIANCA);
@@ -189,37 +189,39 @@ public class GameManager {
 					return false;
 		return true;
 	}
-	
-	public boolean inserisciMossaComputer(final boolean bianca)
-			throws NessunaMossaPossibileException {
-		
-		final Point mossa_point = this.ai.getMossa(this, bianca);
-		
+
+	public void inserisciMossaComputer(final boolean bianca,ComputerPlayCallback callback) {
+
+		this.ai.getMossa(this, bianca,callback);
+
+	}
+
+	public boolean doComputerMove(Point mossa_point,final boolean bianca)throws NessunaMossaPossibileException{
 		final Cella giocatore = bianca ? Cella.BIANCA : Cella.NERA;
-		
+
 		if (mossa_point == null)
 			if (this.ilGiocatorePuoEffetturareUnaMossa(giocatore))
 				return false;
 			else
 				return true;
-		
+
 		// FIXME da togliere
 		final Mossa mossa = new Mossa(mossa_point.x, mossa_point.y, giocatore);
-		
+
 		if (!this.controllaMossa(mossa)) {
 			System.out.println("Mossa non valida");
 			throw new IllegalArgumentException("Mossa non valida");
 		}
-		
+
 		this.ultimaMossaComputer = mossa;
-		
+
 		final Cella avversario = bianca ? Cella.NERA : Cella.BIANCA;
-		
+
 		this.setCella(mossa);
-		
+
 		if (this.ilGiocoEFinito())
 			return true;
-		
+
 		if (this.ilGiocatorePuoEffetturareUnaMossa(avversario))
 			return false;
 		else if (this.ilGiocatorePuoEffetturareUnaMossa(giocatore)) {
@@ -228,7 +230,6 @@ public class GameManager {
 					"Nessuna mossa possibile per " + avversario);
 		} else
 			return true;
-		
 	}
 	
 	// r e c vanno da 1 a 8
@@ -440,5 +441,5 @@ public class GameManager {
 		}
 		
 	}
-	
+
 }

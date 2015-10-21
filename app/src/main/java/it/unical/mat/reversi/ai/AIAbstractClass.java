@@ -1,5 +1,6 @@
 package it.unical.mat.reversi.ai;
 
+import android.content.Context;
 import android.graphics.Point;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,18 +10,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import it.unical.mat.embasp.base.ASPHandler;
+import it.unical.mat.embasp.base.AnswerSetCallback;
+import it.unical.mat.embasp.base.AnswerSets;
+import it.unical.mat.embasp.dlv.DLVHandler;
+
 import it.unical.mat.reversi.core.Cella;
+import it.unical.mat.reversi.core.ComputerPlayCallback;
 import it.unical.mat.reversi.core.GameManager;
 
-public abstract class AIAbstractClass {
+public abstract class AIAbstractClass implements AnswerSetCallback{
 	
 	private String inizio_file_fatti;
 	private final String file_guess_and_check;
-	
+	private ASPHandler handler;
+	ComputerPlayCallback callback;
+	private Context context;
+
 	public AIAbstractClass() {
 		
 		String temp_file_guess_and_check = "";
-		
+		handler=new DLVHandler();
 		try {
 			final BufferedReader bufferedReader = new BufferedReader(
 					new FileReader("FilesDLV" + File.separator
@@ -44,7 +54,7 @@ public abstract class AIAbstractClass {
 		
 	}
 	
-	private String chiamaDLV(final GameManager gameManager) {
+	private void chiamaDLV(final GameManager gameManager) {
 		
 		final String file_fatti = this.creaFileFatti(gameManager);
 		
@@ -54,31 +64,35 @@ public abstract class AIAbstractClass {
 		
 		final String file_optimize = this.creaFileOptimize();
 		
-		try {
-			final Process process = Runtime.getRuntime().exec(
-					"dlv.mingw.exe -silent -filter=posizioneScelta --");
-			
-			final PrintWriter printWriter = new PrintWriter(
-					process.getOutputStream());
-			printWriter.write(file_fatti);
-			printWriter.write(this.file_guess_and_check);
-			printWriter.write(file_optimize);
-			printWriter.close();
-			
-			final String readLine = new BufferedReader(new InputStreamReader(
-					process.getInputStream())).readLine();
-			
-			System.out.println("readLine : " + readLine);
-			
-			return readLine;
-			
-		} catch (final IOException e) {
+//		try {
+
+
+//			final Process process = Runtime.getRuntime().exec(
+//					"dlv.mingw.exe -silent -filter=posizioneScelta --");
+
+//			final PrintWriter printWriter = new PrintWriter(
+//					process.getOutputStream());
+//			printWriter.write(file_fatti);
+//			printWriter.write(this.file_guess_and_check);
+//			printWriter.write(file_optimize);
+//			printWriter.close();
+			handler.addRawInput(file_fatti);
+			handler.addRawInput(this.file_guess_and_check);
+			handler.addRawInput(file_optimize);
+
+//			final String readLine = new BufferedReader(new InputStreamReader(
+//					process.getInputStream())).readLine();
+
+			//handler.start(context,this);
+//			System.out.println("readLine : " + readLine);
+			handler.start(context,this);
+
+//		} catch (final IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//			e.printStackTrace();
+//		}
 		
-		return null;
-		
+
 	}
 	
 	private String creaFileFatti(final GameManager gameManager) {
@@ -98,19 +112,14 @@ public abstract class AIAbstractClass {
 	
 	protected abstract String creaFileOptimize();
 	
-	public Point getMossa(final GameManager gameManager, final boolean bianca) {
+	public void getMossa(final GameManager gameManager, final boolean bianca,ComputerPlayCallback callback) {
 		
 		this.inizio_file_fatti = "rigaOcolonna(1..8).";
 		
 		this.inizio_file_fatti += "coloreComputer(" + (bianca ? "b" : "n")
 				+ ").";
-		
-		final String risultatoDLV = this.chiamaDLV(gameManager);
-		if (risultatoDLV != null)
-			return this.parseResult(risultatoDLV);
-		else
-			return null;
-		
+		this.callback=callback;
+		this.chiamaDLV(gameManager);
 	}
 	
 	private Point parseResult(final String risultatoDLV) {
@@ -124,5 +133,20 @@ public abstract class AIAbstractClass {
 		return new Point(Integer.parseInt(point[0]), Integer.parseInt(point[1]));
 		
 	}
-	
+
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	public void callback(AnswerSets answerSets) {
+		String answerString=answerSets.getAnswerSetsString();
+		Point p=parseResult(answerString);
+		callback.callback(p);
+	}
 }
