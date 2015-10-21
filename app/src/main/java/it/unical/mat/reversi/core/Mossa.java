@@ -1,9 +1,15 @@
 package it.unical.mat.reversi.core;
 
+import it.unical.mat.embasp.mapper.Predicate;
+import it.unical.mat.embasp.mapper.Term;
+
+@Predicate("posizioneScelta")
 public class Mossa {
 	
 	// da 1 a 8
+	@Term(0)
 	private final int riga;
+	@Term(1)
 	private final int colonna;
 	
 	private final Cella tipo;

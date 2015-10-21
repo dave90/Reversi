@@ -1,5 +1,6 @@
 package it.unical.mat.reversi.core;
 
+import android.content.Context;
 import android.graphics.Point;
 
 import java.io.Serializable;
@@ -190,9 +191,9 @@ public class GameManager {
 		return true;
 	}
 
-	public void inserisciMossaComputer(final boolean bianca,ComputerPlayCallback callback) {
+	public void inserisciMossaComputer(final boolean bianca, ComputerPlayCallback callback, Context contex) {
 
-		this.ai.getMossa(this, bianca,callback);
+		this.ai.getMossa(this, bianca,callback,contex);
 
 	}
 

@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 import it.unical.mat.embasp.base.ASPHandler;
 import it.unical.mat.embasp.base.AnswerSetCallback;
@@ -18,6 +20,7 @@ import it.unical.mat.embasp.dlv.DLVHandler;
 import it.unical.mat.reversi.core.Cella;
 import it.unical.mat.reversi.core.ComputerPlayCallback;
 import it.unical.mat.reversi.core.GameManager;
+import it.unical.mat.reversi.core.Mossa;
 
 public abstract class AIAbstractClass implements AnswerSetCallback{
 	
@@ -25,7 +28,6 @@ public abstract class AIAbstractClass implements AnswerSetCallback{
 	private final String file_guess_and_check;
 	private ASPHandler handler;
 	ComputerPlayCallback callback;
-	private Context context;
 
 	public AIAbstractClass() {
 		
@@ -54,7 +56,7 @@ public abstract class AIAbstractClass implements AnswerSetCallback{
 		
 	}
 	
-	private void chiamaDLV(final GameManager gameManager) {
+	private void chiamaDLV(final GameManager gameManager, Context context) {
 		
 		final String file_fatti = this.creaFileFatti(gameManager);
 		
@@ -112,14 +114,14 @@ public abstract class AIAbstractClass implements AnswerSetCallback{
 	
 	protected abstract String creaFileOptimize();
 	
-	public void getMossa(final GameManager gameManager, final boolean bianca,ComputerPlayCallback callback) {
+	public void getMossa(final GameManager gameManager, final boolean bianca,ComputerPlayCallback callback,Context context) {
 		
 		this.inizio_file_fatti = "rigaOcolonna(1..8).";
 		
 		this.inizio_file_fatti += "coloreComputer(" + (bianca ? "b" : "n")
 				+ ").";
 		this.callback=callback;
-		this.chiamaDLV(gameManager);
+		this.chiamaDLV(gameManager,context);
 	}
 	
 	private Point parseResult(final String risultatoDLV) {
@@ -135,18 +137,26 @@ public abstract class AIAbstractClass implements AnswerSetCallback{
 	}
 
 
-	public Context getContext() {
-		return context;
-	}
-
-	public void setContext(Context context) {
-		this.context = context;
-	}
-
 	@Override
 	public void callback(AnswerSets answerSets) {
-		String answerString=answerSets.getAnswerSetsString();
-		Point p=parseResult(answerString);
+		Mossa mv=null;
+		try {
+			Set<Object> objs= answerSets.getAnswerSetsList().get(0).getAnswerObjects();
+			if(objs.size()>0)
+				mv=(Mossa)objs.iterator().next();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+//		Point p=parseResult(answerString);
+		Point p=null;
+		if(mv!=null)
+			p=new Point(mv.getRiga(),mv.getColonna());
 		callback.callback(p);
 	}
 }
